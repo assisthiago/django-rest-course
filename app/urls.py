@@ -3,5 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('movies/', include('app.core.api.urls')),
+    path('watch/', include('app.core.api.urls')),
 ]
