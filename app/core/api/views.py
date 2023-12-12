@@ -22,7 +22,7 @@ class WatchListGAV(
         return self.create(request, *args, **kwargs)
 
 
-class WatchListDetails(views.APIView):
+class WatchListDetail(views.APIView):
     def get_object(self, pk):
         try:
             return WatchList.objects.get(pk=pk)
@@ -62,7 +62,7 @@ class StreamPlataformList(
         return self.create(request, *args, **kwargs)
 
 
-class StreamPlataformDetails(views.APIView):
+class StreamPlataformDetail(views.APIView):
     def get_object(self, pk):
         try:
             return StreamPlataform.objects.get(pk=pk)
