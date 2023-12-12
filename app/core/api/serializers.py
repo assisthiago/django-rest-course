@@ -2,14 +2,17 @@ import random
 
 from rest_framework import serializers
 
-from app.core.models import StreamPlataform, WatchList
+from app.core.models import Review, StreamPlataform, WatchList
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = "__all__"
 
 
 class WatchListSerializer(serializers.ModelSerializer):
-    rating = serializers.SerializerMethodField()
-
-    def get_rating(self, object):
-        return random.randint(0, 5)
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
         model = WatchList
