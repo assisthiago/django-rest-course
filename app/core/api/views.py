@@ -1,6 +1,5 @@
 from django.http import Http404
 from rest_framework import status, views, generics, mixins
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from app.core.api.serializers import ReviewSerializer, StreamPlataformSerializer, WatchListSerializer
@@ -102,16 +101,11 @@ class ReviewListGAV(
         return self.create(request, *args, **kwargs)
 
 
-class ReviewDetailGAV(
-    mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView):
-
+class ReviewListGAV(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+class ReviewDetailGAV(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
