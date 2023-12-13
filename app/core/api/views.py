@@ -70,11 +70,16 @@ class StreamPlataformDetail(views.APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
-        serializer = StreamPlataformSerializer(self.get_object(pk=pk))
+        serializer = StreamPlataformSerializer(self.get_object(pk=pk), context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk, format=None):
-        serializer = StreamPlataformSerializer(instance=self.get_object(pk=pk), data=request.data)
+        serializer = StreamPlataformSerializer(
+            instance=self.get_object(pk=pk),
+            data=request.data,
+            context={'request': request}
+        )
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -102,8 +107,14 @@ class ReviewListGAV(
 
 
 class ReviewListGAV(generics.ListCreateAPIView):
-    queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return Review.objects.filter(watchlist=self.kwargs["pk"])
+
+    def perform_create(self, serializer):
+        watchlist = WatchList.objects.get(pk=self.kwargs["pk"])
+        serializer.save(watchlist=watchlist)
 
 
 class ReviewDetailGAV(generics.RetrieveUpdateDestroyAPIView):
