@@ -47,48 +47,9 @@ class WatchListDetail(views.APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class StreamPlataformViewSet(viewsets.ViewSet):
+class StreamPlataformModelViewSet(viewsets.ModelViewSet):
     queryset = StreamPlataform.objects.all()
     serializer_class = StreamPlataformSerializer
-
-    def list(self, request):
-        serializer = self.serializer_class(self.queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request):
-        serializer = StreamPlataformSerializer(
-            data=request.data,
-            context={'request': request}
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, pk=None):
-        watchlist = get_object_or_404(self.queryset, pk=pk)
-        serializer = self.serializer_class(watchlist)
-        return Response(serializer.data)
-
-    def update(self, request, pk=None):
-        serializer = self.serializer_class(
-            instance=get_object_or_404(self.queryset, pk=pk),
-            data=request.data,
-            context={'request': request}
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk=None):
-        watchlist = get_object_or_404(self.queryset, pk=pk)
-        watchlist.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ReviewListGAV(

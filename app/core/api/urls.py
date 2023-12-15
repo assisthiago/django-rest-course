@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 import app.core.api.views
 
 router = DefaultRouter()
-router.register("stream", app.core.api.views.StreamPlataformViewSet, basename="streamplataform")
+router.register("stream", app.core.api.views.StreamPlataformModelViewSet, basename="streamplataform")
 
 urlpatterns = [
     path('list/', app.core.api.views.WatchListGAV.as_view(), name="watchlist-list"),
