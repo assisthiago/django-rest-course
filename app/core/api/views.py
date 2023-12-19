@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import status, views, viewsets, generics, mixins
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from app.core.api.serializers import ReviewSerializer, StreamPlataformSerializer, WatchListSerializer
@@ -75,7 +76,12 @@ class ReviewListGAV(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         watchlist = WatchList.objects.get(pk=self.kwargs["pk"])
-        serializer.save(watchlist=watchlist)
+        review_user = self.request.user
+
+        if Review.objects.filter(watchlist=watchlist, review_user=review_user).exists():
+            raise ValidationError("You have already reviewed this movie.")
+
+        serializer.save(watchlist=watchlist, review_user=review_user)
 
 
 class ReviewDetailGAV(generics.RetrieveUpdateDestroyAPIView):
